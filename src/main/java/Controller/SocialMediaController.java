@@ -146,3 +146,23 @@ public class SocialMediaController {
     }
 
 }
+
+
+
+// -----------
+public class MessageService {
+    MessageDAO messageDAO;
+    public MessageService() {
+        this.messageDAO = new MessageDAO();
+    }
+
+    public Message updateMessageById(int message_id, Message messageFromBody) {
+        boolean result = messageDAO.updateMessageById(message_id, messageFromBody.getMessage_text());
+        if (result) {
+            return messageDAO.getMessageById(message_id);
+        } else {
+            return null;
+        }
+    }
+
+}

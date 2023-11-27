@@ -1,12 +1,11 @@
-package dao;
+package DAO;
 
 import java.sql.*;
 import java.util.*;
 
-import util.ConnectionUtil;
-import model.Message;
+import Util.ConnectionUtil;
+import Model.Message;
 
-// TODO: do i include long time_posted_epoch?
 public class MessageDAO {
 
     // 1 --> read all messages
@@ -90,18 +89,19 @@ public class MessageDAO {
     }
 
     // 4 --> create message
-    public Message addMessage(int posted_by, String message_text) {
+    // ALTERNATE FOR SETTER USE --> public Integer addMessage(Message createdMessage) {
+    public Message addMessage(Message createdMessage) {
 
         try (Connection connection = ConnectionUtil.getConnection()) {
             // 1. create statement & assign any parameters
             String sql = "INSERT INTO message(posted_by, message_text, time_posted_epoch) VALUES(?, ?, ?)";
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            ps.setInt(1, posted_by);
-            ps.setString(2, message_text);
-            Timestamp current = new Timestamp(System.currentTimeMillis());
-            long timestamp = current.getTime();
-            ps.setLong(3, timestamp);
+            ps.setInt(1, createdMessage.getPosted_by());
+            ps.setString(2, createdMessage.getMessage_text());
+            // Timestamp current = new Timestamp(System.currentTimeMillis());
+            // long timestamp = current.getTime();
+            ps.setLong(3, createdMessage.getTime_posted_epoch());
 
             // 2. execute statement
             ps.executeUpdate();
@@ -110,7 +110,8 @@ public class MessageDAO {
             // 3. process results
             while (rs.next()) {
                 int id = rs.getInt(1);
-                return new Message(id, posted_by, message_text, timestamp);
+                //ALTERNATE for SETTER USE --> return id;
+                return new Message(id, createdMessage.getPosted_by(), createdMessage.getMessage_text(), createdMessage.getTime_posted_epoch());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,14 +124,11 @@ public class MessageDAO {
     public boolean updateMessageById(int message_id, String message_text) {
         try (Connection connection = ConnectionUtil.getConnection()) {
             // 1. create statement & assign any parameters
-            String sql = "UPDATE message SET message_text = ?, time_posted_epoch = ? WHERE message_id = ?";
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, message_text);
-            Timestamp current = new Timestamp(System.currentTimeMillis());
-            long timestamp = current.getTime();
-            ps.setLong(2, timestamp);
-            ps.setInt(3, message_id);
+            ps.setInt(2, message_id);
 
             // 2. execute statement
             int result = ps.executeUpdate();
