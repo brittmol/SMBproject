@@ -94,7 +94,7 @@ public class NoteController {
 
   private void deleteNoteById(Context ctx) {
     long idFromPath = Long.parseLong(ctx.pathParam("id"));
-    boolean detetionSuccessful = noteService.deleteNoteById(idFromPath);
+    boolean deletionSuccessful = noteService.deleteNoteById(idFromPath);
     if(deletionSuccessful) {
       ctx.result("Note was deleted!").status(200);
     } else {
