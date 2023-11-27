@@ -1,8 +1,8 @@
-package service;
+package Service;
 
 import java.util.*;
-import dao.MessageDAO;
-import model.Message;
+import DAO.MessageDAO;
+import Model.Message;
 
 public class MessageService {
 
@@ -26,25 +26,39 @@ public class MessageService {
     }
 
     public Message addMessage(Message messageToAdd) {
-        return messageDAO.addMessage(messageToAdd.getPosted_by(), messageToAdd.getMessage_text());
+        String addedMessageText = messageToAdd.getMessage_text();
+        // TODO: check if real user --> Account DAO
+        if (!addedMessageText.isEmpty() && addedMessageText.length() <= 255 && addedMessageText != null) {
+            return messageDAO.addMessage(messageToAdd);
+        }
+        return null;
+        // ALTERNATE FOR SETTER USE --> get id from DAO
+            // Integer idFromDAO = messageDAO.addMessage(messageToAdd);
+            // messageToAdd.setMessage_id(idFromDAO);
+            // return messageToAdd;
     }
 
-    public Message updateMessageById(int message_id, String message_text) {
-        boolean result = messageDAO.updateMessageById(message_id, message_text);
-        if (result) {
-            return messageDAO.getMessageById(message_id);
-        } else {
-            return null;
+    public Message updateMessageById(int message_id, Message messageToUpdate) {
+        String updatedMessageText = messageToUpdate.getMessage_text();
+        if (!updatedMessageText.isEmpty() && updatedMessageText.length() <= 255 && updatedMessageText != null) {
+            // If the new message_text is blank or exceeds 255 characters, return a 400 response.
+            boolean result = messageDAO.updateMessageById(message_id, updatedMessageText);
+            if (result) {
+                return messageDAO.getMessageById(message_id);
+            }
         }
+        return null;
     }
 
     public Message deleteMessageById(int message_id) {
+        Message deletedMessage = messageDAO.getMessageById(message_id);
         boolean result = messageDAO.deleteMessageById(message_id);
         if (result) {
-            return messageDAO.getMessageById(message_id);
+            return deletedMessage;
         } else {
             return null;
         }
     }
+
 
 }
