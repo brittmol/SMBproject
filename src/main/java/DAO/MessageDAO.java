@@ -110,7 +110,7 @@ public class MessageDAO {
             // 3. process results
             while (rs.next()) {
                 int id = rs.getInt(1);
-                return new Message(id, message_text, posted_by, timestamp);
+                return new Message(id, posted_by, message_text, timestamp);
             }
         } catch (SQLException e) {
             e.printStackTrace();
