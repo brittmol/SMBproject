@@ -3,6 +3,11 @@ package Controller;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.*;
+
+import model.Message;
+import service.MessageService;
+
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
  * found in readme.md as well as the test cases. You should
@@ -20,7 +25,7 @@ import io.javalin.http.Context;
  * UserLogin
  * UserRegistration
  *
- * 
+ *
  */
 
 public class SocialMediaController {
@@ -33,7 +38,15 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
 
+        // Create, 
+
         return app;
+    }
+
+    // add dependency
+    MessageService messageService;
+    public MessageController() {
+        this.messageService = new MessageService();
     }
 
     /**
