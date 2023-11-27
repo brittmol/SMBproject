@@ -5,8 +5,8 @@ import io.javalin.http.Context;
 
 import java.util.*;
 
-import model.Message;
-import service.MessageService;
+import Model.Message;
+import Service.MessageService;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your
@@ -39,6 +39,13 @@ public class SocialMediaController {
      * @return a Javalin app object which defines the behavior of the Javalin
      *         controller.
      */
+
+    // add dependency
+    MessageService messageService;
+    public SocialMediaController() {
+        this.messageService = new MessageService();
+    }
+
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
@@ -51,23 +58,17 @@ public class SocialMediaController {
 
         // GET all, GET all by user, GET by id
         app.get("/messages", this::getAllMessages);
-        app.get("/messages/{userId}", this::getAllUserMessages); // TODO: fix path
+        app.get("/accounts/{accountId}/messages", this::getAllUserMessages); // TODO: fix path
         app.get("/messages/{id}", this::getMessageById);
 
-        // POST, PUT, DELETE
+        // POST, PATCH, DELETE
         app.post("/messages", this::addMessage);
-        app.put("/messages/{id}", this::updateMessageById);
+        app.patch("/messages/{id}", this::updateMessageById);
         app.delete("/messages/{id}", this::deleteMessageById);
 
         return app;
     }
 
-    // add dependency
-    MessageService messageService;
-
-    public MessageController() {
-        this.messageService = new MessageService();
-    }
 
     /**
      * This is an example handler for an example endpoint.
@@ -88,30 +89,27 @@ public class SocialMediaController {
         // ctx.json(messagesRetrieved).status(200);
         if (messagesRetrieved != null) {
             ctx.json(messagesRetrieved).status(200);
-        } else {
-            ctx.result("Could not get all messages").status(400);
         }
     }
 
     private void getAllUserMessages(Context ctx) {
-        int userId_fromPath = Int.parseInt(ctx.pathParam("userId"));
-        ArrayList<Message> messagesRetrieved = messageService.getAllUserMessages(userId_fromPath);
+        int accountId_fromPath = Integer.parseInt(ctx.pathParam("accountId"));
+        ArrayList<Message> messagesRetrieved = messageService.getAllUserMessages(accountId_fromPath);
         // ctx.json(messagesRetrieved).status(200);
         if (messagesRetrieved != null) {
             ctx.json(messagesRetrieved).status(200);
-        } else {
-            ctx.result("Could not get user messages").status(400);
         }
     }
 
     private void getMessageById(Context ctx) {
-        int id_fromPath = Int.parseInt(ctx.pathParam("id"));
+        int id_fromPath = Integer.parseInt(ctx.pathParam("id"));
         Message messageRetrieved = messageService.getMessageById(id_fromPath);
         if (messageRetrieved != null) {
             ctx.json(messageRetrieved).status(200);
-        } else {
-            ctx.result("Could not find message").status(400);
         }
+        // else {
+        //     ctx.result("Could not find message").status(400);
+        // }
     }
 
     private void addMessage(Context ctx) {
@@ -120,48 +118,28 @@ public class SocialMediaController {
         if (messageInserted != null) {
             ctx.json(messageInserted).status(200);
         } else {
-            ctx.result("Message could not be created").status(400);
+            ctx.result("").status(400);
         }
     }
 
     private void updateMessageById(Context ctx) {
-        int id_fromPath = Int.parseInt(ctx.pathParam("id"));
+        int id_fromPath = Integer.parseInt(ctx.pathParam("id"));
         Message messageFromBody = ctx.bodyAsClass(Message.class);
         Message updatedMessage = messageService.updateMessageById(id_fromPath, messageFromBody);
         if (updatedMessage != null) {
             ctx.json(updatedMessage).status(200);
         } else {
-            ctx.result("Message could not be updated").status(400);
+            ctx.result("").status(400);
         }
     }
 
     private void deleteMessageById(Context ctx) {
-        int id_fromPath = Int.parseInt(ctx.pathParam("id"));
-        boolean isDeleted = messageService.deleteMessageById(id_fromPath);
-        if (isDeleted) {
-            ctx.result("Message was deleted").status(200);
+        int id_fromPath = Integer.parseInt(ctx.pathParam("id"));
+        Message deletedMessage = messageService.deleteMessageById(id_fromPath);
+        if (deletedMessage != null) {
+            ctx.json(deletedMessage).status(200);
         } else {
-            ctx.result("Message was not deleted or could not be found").status(400);
-        }
-    }
-
-}
-
-
-
-// -----------
-public class MessageService {
-    MessageDAO messageDAO;
-    public MessageService() {
-        this.messageDAO = new MessageDAO();
-    }
-
-    public Message updateMessageById(int message_id, Message messageFromBody) {
-        boolean result = messageDAO.updateMessageById(message_id, messageFromBody.getMessage_text());
-        if (result) {
-            return messageDAO.getMessageById(message_id);
-        } else {
-            return null;
+            ctx.result("").status(200);
         }
     }
 
