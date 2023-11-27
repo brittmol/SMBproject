@@ -8,22 +8,11 @@ public class MessageService {
 
     // add dependency
     MessageDAO messageDAO;
-
     public MessageService() {
         this.messageDAO = new MessageDAO();
     }
 
-    /*
-     * getMessage_id()
-     * getPosted_by()
-     * getMessage_text()
-     * getTime_posted_epoch
-     */
-
-    public Message addMessage(Message messageToAdd) {
-        return messageDAO.addMessage(messageToAdd.getPosted_by(), messageToAdd.getMessage_text());
-    }
-
+    // add other stuff
     public ArrayList<Message> getAllMessages() {
         return messageDAO.getAllMessages();
     }
@@ -34,6 +23,10 @@ public class MessageService {
 
     public Message getMessageById(int message_id) {
         return messageDAO.getMessageById(message_id);
+    }
+
+    public Message addMessage(Message messageToAdd) {
+        return messageDAO.addMessage(messageToAdd.getPosted_by(), messageToAdd.getMessage_text());
     }
 
     public Message updateMessageById(int message_id, String message_text) {
