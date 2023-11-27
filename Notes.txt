@@ -1,0 +1,46 @@
+ -------- TESTS ----------
+ 1 * CreateMessage
+ 2 * RetrieveAllMessages
+ 3 * RetrieveAllMessagesForUser
+ 4 * RetrieveMessageByMessageId
+ 5 * UpdateMessageText
+ 6 * DeleteMessageByMessageId
+
+ 1 // create message
+    addMessage(int posted_by, String message_text)
+
+ 2 // read all messages
+    getAllMessages()
+
+ 3 // read all messages for user
+    getAllUserMessages(int posted_by)
+
+ 4 // read message by MessageId
+    getMessageById(int message_id)
+
+ 5 // update message text
+    updateMessageById(int message_id, String message_text)
+
+ 6 // delete message by MessageId
+    deleteMessageById(int message_id)
+
+ * Message:
+ *      int message_id  (PRIMARY KEY)
+ *      int posted_by   (FOREIGN KEY)
+ *      String message_text (content of message)
+ *      long time_posted_epoch  (TIMESTAMP)
+ *
+ *
+        try (Connection connection = ConnectionUtil.getConnection()) {
+            // 1. create statement & assign any parameters
+
+            // 2. execute statement
+
+            // 3. process results
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // TODO:
+        return null;
