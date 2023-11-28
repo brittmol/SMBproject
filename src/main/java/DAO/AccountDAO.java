@@ -1,18 +1,3 @@
-/*
- *
- * Login:
-    - successful
-    - invalid username
-    - invalid password
-
-Register:
-    - successful
-    - duplicate username
-    - username blank
-    - user password length less than 4
- *
- */
-
 package DAO;
 
 import java.sql.*;
@@ -28,7 +13,7 @@ public class AccountDAO {
         try (Connection connection = ConnectionUtil.getConnection()) {
             // 1. create statement & assign any parameters
             String sql = "INSERT INTO account(username, password) VALUES(?, ?)";
-            PreparedStatement ps = connection.prepareStatement(sql.Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, createdAccount.getUsername());
             ps.setString(2, createdAccount.getPassword());

@@ -18,20 +18,6 @@ import Service.MessageService;
  * controller may be built.
  */
 
-/*
- * TESTS
- * CreateMessage
- * DeleteMessageByMessageId
- * RetrieveAllMessagesForUser
- * RetrieveAllMessages
- * RetrieveMessageByMessageId
- * UpdateMessageText
- * UserLogin
- * UserRegistration
- *
- *
- */
-
 public class SocialMediaController {
     /**
      * In order for the test cases to work, you will need to write the endpoints in
@@ -106,8 +92,18 @@ public class SocialMediaController {
 
     private void login(Context ctx) {
         Account accountFromBody = ctx.bodyAsClass(Account.class);
-        // need to make sure the accountFromBody username and password
-        // is the same as the getAccount
+
+        // Retrieve username and password from accountFromBody
+        String username = accountFromBody.getUsername();
+        String password = accountFromBody.getPassword();
+
+        Account user = accountService.getAccount(username, password);
+
+        if(user != null) {
+            ctx.json(user).status(200);
+        } else {
+            ctx.result("").status(401);
+        }
     }
 
     private void getAllMessages(Context ctx) {
