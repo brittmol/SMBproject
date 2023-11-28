@@ -106,7 +106,8 @@ public class SocialMediaController {
 
     private void login(Context ctx) {
         Account accountFromBody = ctx.bodyAsClass(Account.class);
-        
+        // need to make sure the accountFromBody username and password
+        // is the same as the getAccount
     }
 
     private void getAllMessages(Context ctx) {
