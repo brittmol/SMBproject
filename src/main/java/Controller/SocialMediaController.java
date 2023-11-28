@@ -5,7 +5,9 @@ import io.javalin.http.Context;
 
 import java.util.*;
 
+import Model.Account;
 import Model.Message;
+import Service.AccountService;
 import Service.MessageService;
 
 /**
@@ -41,8 +43,11 @@ public class SocialMediaController {
      */
 
     // add dependency
+    AccountService accountService;
     MessageService messageService;
+
     public SocialMediaController() {
+        this.accountService = new AccountService();
         this.messageService = new MessageService();
     }
 
@@ -56,9 +61,13 @@ public class SocialMediaController {
             ctx.result("Home Page here");
         });
 
+        // POST register and login
+        app.post("/register", this::register);
+        app.post("/login", this::login);
+
         // GET all, GET all by user, GET by id
         app.get("/messages", this::getAllMessages);
-        app.get("/accounts/{accountId}/messages", this::getAllUserMessages); // TODO: fix path
+        app.get("/accounts/{accountId}/messages", this::getAllUserMessages);
         app.get("/messages/{id}", this::getMessageById);
 
         // POST, PATCH, DELETE
@@ -84,6 +93,22 @@ public class SocialMediaController {
     }
 
     // create handlers
+
+    private void register(Context ctx) {
+        Account accountFromBody = ctx.bodyAsClass(Account.class);
+        Account accountInserted = accountService.createAccount(accountFromBody);
+        if (accountInserted != null) {
+            ctx.json(accountInserted).status(200);
+        } else {
+            ctx.result("").status(400);
+        }
+    }
+
+    private void login(Context ctx) {
+        Account accountFromBody = ctx.bodyAsClass(Account.class);
+        
+    }
+
     private void getAllMessages(Context ctx) {
         ArrayList<Message> messagesRetrieved = messageService.getAllMessages();
         // ctx.json(messagesRetrieved).status(200);
