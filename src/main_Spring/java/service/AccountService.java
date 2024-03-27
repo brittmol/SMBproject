@@ -17,19 +17,26 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account register(Account account) {
-        // Implement registration logic here
+    public void register(Account account) {
         ArrayList<String> allAccounts = new ArrayList<>(accountRepository.findAll());
         boolean usernameExists = allAccounts.contains(account.getUsername());
         if (account.getUsername().length() > 0 && account.getPassword().length() >= 4 && !usernameExists) {
             return accountRepository.save(account);
         }
-        return null;
     }
 
-    public Account login(Account account) {
-        // Implement login logic here
-        return accountRepository.getAccount(account.getUsername(), account.getPassword());
+    public void login(Account account) {
+        accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
     }
+
+    // public Account register(Account account) {
+    //     ArrayList<String> allAccounts = new ArrayList<>(accountRepository.findAll());
+    //     boolean usernameExists = allAccounts.contains(account.getUsername());
+    //     if (account.getUsername().length() > 0 && account.getPassword().length() >= 4 && !usernameExists) {
+    //         return accountRepository.save(account);
+    //     }
+    //     return null;
+    // }
+
 
 }

@@ -9,4 +9,5 @@ import java.util.*;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, String> {
     // You can add custom query methods here if needed
+    Optional<Account> findByUsernameAndPassword(String username, String password);
 }

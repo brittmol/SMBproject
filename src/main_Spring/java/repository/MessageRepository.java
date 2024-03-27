@@ -9,4 +9,5 @@ import java.util.*;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, String> {
     // You can add custom query methods here if needed
+    List<Message> findByUserId(int userId);
 }

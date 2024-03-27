@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-
 @Service
 public class MessageService {
 
@@ -19,50 +18,72 @@ public class MessageService {
     }
 
     public List<Message> getAllMessages() {
-        // Implement logic to retrieve all messages
-        return messageRepository.findAll();
+        return (List<Message>) messageRepository.findAll();
     }
 
     public Message getMessageById(int messageId) {
-        // Implement logic to retrieve message by ID
         return messageRepository.findById(messageId);
     }
 
     public List<Message> getMessagesByUserId(int userId) {
-        // Implement logic to retrieve messages by user ID
-        return messageRepository.findByUserId(userId);
+        List<Message> messagesByUser = messageRepository.findByUserId(userId);
+        return messagesByUser;
     }
 
-    public Message createMessage(Message message) {
-        // Implement message creation logic here
+    public void createMessage(Message message) {
         String text = message.getMessage_text();
-        if(!text.isEmpty() && text.length() <= 255 && text != null) {
+        if (!text.isEmpty() && text.length() <= 255 && text != null) {
             return messageRepository.save(message);
         }
-        return null;
     }
 
-    public Message updateMessageById(int messageId, Message messageUpdated) {
-        // Implement logic to update message text
+    public void updateMessageById(int messageId, Message messageUpdated) {
+        Message message = messageRepository.findById(messageId);
         String updatedText = messageUpdated.getMessage_text();
-        if(!updatedText.isEmpty() && updatedText.length() <= 255 && updatedText != null) {
-            boolean result = messageRepository.updateMessageById(messageId, updatedText);
-            if(result) {
-                return messageRepository.findById(messageId);
-            }
+        if (!updatedText.isEmpty() && updatedText.length() <= 255 && updatedText != null) {
+            message.setMessage_text(updatedText);
+            messageRepository.save(message);
         }
-        return null;
     }
 
-    public deleteMessageById(int messageId) {
-        // Implement logic to delete message by ID
-        Message deletedMessage = messageRepository.findById(messageId);
-        boolean result = messageRepository.deleteById(messageId);
-        if(result) {
-            return deletedMessage;
-        } else {
-            return null;
-        }
+    public void deleteMessageById(int messageId) {
+        messageRepository.deleteById(messageId);
     }
+
+    // ------------------------------------
+
+    // public Message createMessage(Message message) {
+    // String text = message.getMessage_text();
+    // if (!text.isEmpty() && text.length() <= 255 && text != null) {
+    // return messageRepository.save(message);
+    // }
+    // return null;
+    // }
+
+    // public Message updateMessageById(int messageId, Message messageUpdated) {
+    // // Message message = messageRepository.findById(messageId);
+    // // message.setMessage_text(messageUpdated);
+    // // messageRepository.save(message);
+
+    // String updatedText = messageUpdated.getMessage_text();
+    // if (!updatedText.isEmpty() && updatedText.length() <= 255 && updatedText !=
+    // null) {
+    // boolean result = messageRepository.updateMessageById(messageId, updatedText);
+    // if (result) {
+    // return messageRepository.findById(messageId);
+    // }
+    // }
+    // return null;
+    // }
+
+    // public deleteMessageById(int messageId) {
+    // Message deletedMessage = messageRepository.findById(messageId);
+    // boolean result = messageRepository.deleteById(messageId);
+    // if(result) {
+    // return deletedMessage;
+    // } else {
+    // return null;
+    // }
+    // }
 
 }

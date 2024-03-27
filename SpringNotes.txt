@@ -21,7 +21,7 @@ Project reqs
 AccountRepository
     - getAllUsernames()                    --> findAll()
     - createAccount(account)               --> save()
-    - getAccount(username, password)       --> ***
+    - getAccount(username, password)       --> findById()
 
 MessageRepository
     - getAllMessages()                      --> findAll()
