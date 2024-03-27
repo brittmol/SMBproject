@@ -1,0 +1,22 @@
+
+
+Project reqs
+
+1. Need Bean for:
+    - AccountService
+    - MessageService
+    - AccountRepository
+    - MessageRepository
+    - SocialMediaController
+
+2. JPA-Repositories based on Entities for:
+    - AccountRepository
+    - MessageRepository
+
+3. Spring's default error Message
+    - leverage MVC?
+
+
+
+POST /register
+    - 
