@@ -38,7 +38,7 @@ public class MessageService {
         return null;
     }
 
-    public Message updateMessage(int messageId, Message messageUpdated) {
+    public Message updateMessageById(int messageId, Message messageUpdated) {
         // Implement logic to update message text
         String updatedText = messageUpdated.getMessage_text();
         if(!updatedText.isEmpty() && updatedText.length() <= 255 && updatedText != null) {
@@ -50,7 +50,7 @@ public class MessageService {
         return null;
     }
 
-    public deleteMessage(int messageId) {
+    public deleteMessageById(int messageId) {
         // Implement logic to delete message by ID
         Message deletedMessage = messageRepository.getMessageById(messageId);
         boolean result = messageRepository.deleteMessageById(messageId);
