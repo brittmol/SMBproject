@@ -14,41 +14,51 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
-    public Message createMessage(Message message) {
-        // Implement message creation logic here
-        return messageRepository.save(message);
-    }
-
     public List<Message> getAllMessages() {
         // Implement logic to retrieve all messages
-        return messageRepository.findAll();
+        return messageRepository.getAllMessages();
     }
 
-    public Message getMessageById(Integer messageId) {
+    public Message getMessageById(int messageId) {
         // Implement logic to retrieve message by ID
-        Optional<Message> optionalMessage = messageRepository.findById(messageId);
-        return optionalMessage.orElse(null);
+        return messageRepository.getMessageById(messageId);
     }
 
-    public List<Message> getMessagesByUserId(Integer userId) {
+    public List<Message> getMessagesByUserId(int userId) {
         // Implement logic to retrieve messages by user ID
-        return messageRepository.findByPostedBy(userId);
+        return messageRepository.getMessagesByUserId(userId);
     }
 
-    public void deleteMessage(Integer messageId) {
-        // Implement logic to delete message by ID
-        messageRepository.deleteById(messageId);
-    }
-
-    public Message updateMessage(Integer messageId, String newMessageText) {
-        // Implement logic to update message text
-        Optional<Message> optionalMessage = messageRepository.findById(messageId);
-        if (optionalMessage.isPresent()) {
-            Message message = optionalMessage.get();
-            message.setMessage_text(newMessageText);
-            return messageRepository.save(message);
+    public Message createMessage(Message message) {
+        // Implement message creation logic here
+        String text = message.getMessage_text();
+        if(!text.isEmpty() && text.length() <= 255 && text != null) {
+            return messageRepository.createMessage(message);
         }
         return null;
+    }
+
+    public Message updateMessage(int messageId, Message messageUpdated) {
+        // Implement logic to update message text
+        String updatedText = messageUpdated.getMessage_text();
+        if(!updatedText.isEmpty() && updatedText.length() <= 255 && updatedText != null) {
+            boolean result = messageRepository.updateMessageById(messageId, updatedText);
+            if(result) {
+                return messageRepository.getMessageById(messageId);
+            }
+        }
+        return null;
+    }
+
+    public deleteMessage(int messageId) {
+        // Implement logic to delete message by ID
+        Message deletedMessage = messageRepository.getMessageById(messageId);
+        boolean result = messageRepository.deleteMessageById(messageId);
+        if(result) {
+            return deletedMessage;
+        } else {
+            return null;
+        }
     }
 
 }
