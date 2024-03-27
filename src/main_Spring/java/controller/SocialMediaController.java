@@ -69,3 +69,52 @@ public class SocialMediaController {
         return messageService.deleteMessageById(id);
     }
 }
+
+
+/*
+ * do we need to include Response Entity?
+ */
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+@RestController
+public class SocialMediaController {
+
+    // ...
+
+    @PostMapping("/register")
+    public ResponseEntity<Account> register(@RequestBody Account account) {
+        // Implement registration endpoint
+        Account registeredAccount = accountService.register(account);
+        if (registeredAccount != null) {
+            return new ResponseEntity<>(registeredAccount, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Account> login(@RequestBody Account account) {
+        // Implement login endpoint
+        Account loggedInAccount = accountService.login(account);
+        if (loggedInAccount != null) {
+            return new ResponseEntity<>(loggedInAccount, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/messages")
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+        // Implement create message endpoint
+        Message createdMessage = messageService.createMessage(message);
+        if (createdMessage != null) {
+            return new ResponseEntity<>(createdMessage, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // Implement other endpoints as per requirements
+}

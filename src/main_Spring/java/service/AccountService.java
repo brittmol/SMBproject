@@ -10,15 +10,19 @@ import java.util.*;
 @Service
 public class AccountService {
 
-    @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     public Account register(Account account) {
         // Implement registration logic here
-        ArrayList<String> allAccounts = new ArrayList<>(accountRepository.getAllUsernames());
+        ArrayList<String> allAccounts = new ArrayList<>(accountRepository.findAll());
         boolean usernameExists = allAccounts.contains(account.getUsername());
-        if(account.getUsername().length() > 0 && account.getPassword().length() >= 4 && !usernameExists) {
-            return accountRepository.createAccount(account);
+        if (account.getUsername().length() > 0 && account.getPassword().length() >= 4 && !usernameExists) {
+            return accountRepository.save(account);
         }
         return null;
     }

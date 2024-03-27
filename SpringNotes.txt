@@ -19,14 +19,14 @@ Project reqs
 
 
 AccountRepository
-    - getAllUsernames()
-    - createAccount(account)
-    - getAccount(username, password)
+    - getAllUsernames()                    --> findAll()
+    - createAccount(account)               --> save()
+    - getAccount(username, password)       --> ***
 
 MessageRepository
-    - getAllMessages()
-    - getMessageById(messageId)
-    - getMessagesByUserId(userId)
-    - createMessage(message)
-    - updateMessageById(messageId, messageText)
-    - deleteMessageById(messageId)
+    - getAllMessages()                      --> findAll()
+    - getMessageById(messageId)             --> findById()
+    - getMessagesByUserId(userId)           --> *** findByUserId()
+    - createMessage(message)                --> save()
+    - updateMessageById(messageId, messageText) --> ***
+    - deleteMessageById(messageId)          --> deleteById()
