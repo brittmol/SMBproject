@@ -22,7 +22,7 @@ public class MessageService {
     }
 
     public Message getMessageById(int messageId) {
-        return messageRepository.findById(messageId);
+        return messageRepository.findById(messageId).orElse(null);
     }
 
     public List<Message> getMessagesByUserId(int userId) {
@@ -30,60 +30,46 @@ public class MessageService {
         return messagesByUser;
     }
 
-    public void createMessage(Message message) {
+    public Message createMessage(Message message) {
+        // see if posted_by is found in account
+
         String text = message.getMessage_text();
         if (!text.isEmpty() && text.length() <= 255 && text != null) {
             return messageRepository.save(message);
         }
+        return null;
     }
 
-    public void updateMessageById(int messageId, Message messageUpdated) {
-        Message message = messageRepository.findById(messageId);
-        String updatedText = messageUpdated.getMessage_text();
-        if (!updatedText.isEmpty() && updatedText.length() <= 255 && updatedText != null) {
-            message.setMessage_text(updatedText);
-            messageRepository.save(message);
+    public Message updateMessageById(int messageId, Message messageUpdated) {
+        Message messageExists = messageRepository.findById(messageId).orElse(null);
+        if (messageExists != null) {
+            String text = messageUpdated.getMessage_text();
+            if (!text.isEmpty() && text.length() <= 255 && text != null) {
+                return messageRepository.save(messageUpdated);
+            }
+        }
+        return null;
+
+        // Optional<Message> optionalMessage = messageRepository.findById(messageId);
+        // if (optionalMessage.isPresent()) {
+        // Message message = optionalMessage.get();
+        // String updatedText = messageUpdated.getMessage_text();
+        // if (updatedText != null && !updatedText.isEmpty() && updatedText.length() <=
+        // 255) {
+        // message.setMessage_text(updatedText);
+        // return messageRepository.save(message);
+        // }
+        // }
+        // return null;
+    }
+
+    public boolean deleteMessageById(int messageId) {
+        if (messageRepository.existsById(messageId)) {
+            messageRepository.deleteById(messageId);
+            return true;
+        } else {
+            return false;
         }
     }
-
-    public void deleteMessageById(int messageId) {
-        messageRepository.deleteById(messageId);
-    }
-
-    // ------------------------------------
-
-    // public Message createMessage(Message message) {
-    // String text = message.getMessage_text();
-    // if (!text.isEmpty() && text.length() <= 255 && text != null) {
-    // return messageRepository.save(message);
-    // }
-    // return null;
-    // }
-
-    // public Message updateMessageById(int messageId, Message messageUpdated) {
-    // // Message message = messageRepository.findById(messageId);
-    // // message.setMessage_text(messageUpdated);
-    // // messageRepository.save(message);
-
-    // String updatedText = messageUpdated.getMessage_text();
-    // if (!updatedText.isEmpty() && updatedText.length() <= 255 && updatedText !=
-    // null) {
-    // boolean result = messageRepository.updateMessageById(messageId, updatedText);
-    // if (result) {
-    // return messageRepository.findById(messageId);
-    // }
-    // }
-    // return null;
-    // }
-
-    // public deleteMessageById(int messageId) {
-    // Message deletedMessage = messageRepository.findById(messageId);
-    // boolean result = messageRepository.deleteById(messageId);
-    // if(result) {
-    // return deletedMessage;
-    // } else {
-    // return null;
-    // }
-    // }
 
 }
