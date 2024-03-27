@@ -18,5 +18,15 @@ Project reqs
 
 
 
-POST /register
-    - 
+AccountRepository
+    - getAllUsernames()
+    - createAccount(account)
+    - getAccount(username, password)
+
+MessageRepository
+    - getAllMessages()
+    - getMessageById(messageId)
+    - getMessagesByUserId(userId)
+    - createMessage(message)
+    - updateMessageById(messageId, messageText)
+    - deleteMessageById(messageId)
